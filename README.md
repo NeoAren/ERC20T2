@@ -12,7 +12,7 @@
 
 **1.** Clone this repository using any git client
 ```bash
-git clone https://github.com/NeoAren/erc20-token.git
+git clone https://github.com/NeoAren/ERC20T2.git
 ```
 
 **2.** Install the dependencies using npm
