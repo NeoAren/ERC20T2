@@ -1,6 +1,11 @@
 {
   "name": "test",
   "version": "1.0.0",
+  "scripts": {
+    "compile": "truffle compile",
+    "deploy:local": "truffle migrate --network development",
+    "deploy:kovan": "truffle deploy --network kovan"
+  },
   "dependencies": {
     "@openzeppelin/contracts": "^4.4.1",
     "@truffle/hdwallet-provider": "^2.0.0",
