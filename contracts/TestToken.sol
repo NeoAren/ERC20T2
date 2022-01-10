@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -20,16 +21,10 @@ contract TestToken is IERC20, IERC20Metadata, Ownable {
   uint256 private _totalSupply = 0;
 
   // Mapping balances to account addresses
-  mapping (address => uint256) _balances;
+  mapping(address => uint256) _balances;
 
   // Mapping allowances to account addresses;
-  mapping (address => mapping (address => uint256)) _allowances;
-
-  // Event fired when a transfer from one account to another has been made
-  event Transfer(address indexed from, address indexed to, uint256 value);
-
-  // Event fired when an account has approved another account to spend tokens on its behalf
-  event Approval(address indexed owner, address indexed spender, uint256 value);
+  mapping(address => mapping(address => uint256)) _allowances;
 
   // Get the name of the token
   function name() external view returns (string memory) {
