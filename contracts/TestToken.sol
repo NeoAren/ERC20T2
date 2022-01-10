@@ -9,10 +9,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract TestToken is IERC20, IERC20Metadata, Ownable {
 
   // The name of the token
-  string private _name = "TestToken";
+  string private _name = "ERC-20 Test Token";
 
   // The symbol of the token
-  string private _symbol = "TST";
+  string private _symbol = "ERC20T2";
 
   // The number of decimals the token uses
   uint8 private _decimals = 18;
