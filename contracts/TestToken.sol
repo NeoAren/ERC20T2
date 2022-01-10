@@ -1,6 +1,108 @@
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.8.2;
 
-contract TestToken {
-  constructor() public {
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
+// Custom ERC-20 implementation
+contract TestToken is IERC20, IERC20Metadata {
+
+  // The name of the token
+  string private _name;
+
+  // The symbol of the token
+  string private _symbol;
+
+  // The number of decimals the token uses
+  uint8 private _decimals = 18;
+
+  // The total amount of tokens available
+  uint256 private _totalSupply;
+
+  // Mapping balances to account addresses
+  mapping (address => uint256) _balances;
+
+  // Mapping allowances to account addresses;
+  mapping (address => mapping (address => uint256)) _allowances;
+
+  // Event fired when a transfer from one account to another has been made
+  event Transfer(address indexed from, address indexed to, uint256 value);
+
+  // Event fired when an account has approved another account to spend tokens on its behalf
+  event Approval(address indexed owner, address indexed spender, uint256 value);
+
+  // Initialize the contract, set the name, symbol and total supply of the token
+  constructor(string memory name, string memory symbol, uint256 totalSupply) {
+    _name = name;
+    _symbol = symbol;
+    _totalSupply = _totalSupply;
   }
+
+  // Get the name of the token
+  function name() external view returns (string memory) {
+    return _name;
+  }
+
+  // Get the symbol of the token
+  function symbol() external view returns (string memory) {
+    return _symbol;
+  }
+
+  // Get the number of decimals the token uses
+  function decimals() external view returns (uint8) {
+    return _decimals;
+  }
+
+  // Get the total amount of tokens available
+  function totalSupply() external view returns (uint256) {
+    return _totalSupply;
+  }
+
+  // Get the balance of an account by its address
+  function balanceOf(address account) external view returns (uint256) {
+    return _balances[account];
+  }
+
+  // Transfer `amount` of tokens from the caller to `recepient`
+  function transfer(address recepient, uint256 amount) external returns (bool) {
+    _transfer(msg.sender, recepient, amount);
+    return true;
+  }
+
+  // Check the allowance of `spender` by `owner`
+  function allowance(address owner, address spender) external view returns (uint256) {
+    return _allowances[owner][spender];
+  }
+
+  // Approve `spender` an allowance of `amount` tokens
+  function approve(address spender, uint256 amount) external returns (bool) {
+    _approve(msg.sender, spender, amount);
+    return true;
+  }
+
+  // Transfer `amount` of tokens to `recipient` from `sender`
+  function transferFrom(address sender, address recipient, uint256 amount) external returns (bool) {
+    require(_allowances[sender][msg.sender] >= amount, "Cannot transfer due to insufficient allowance.");
+    _transfer(sender, recipient, amount);
+    _allowances[sender][msg.sender] -= amount;
+    return true;
+  }
+
+  // Internal function to perform approvals
+  function _approve(address owner, address spender, uint256 value) private {
+    require(owner != address(0), "Cannot approve allowance from the zero address.");
+    require(spender != address(0), "Cannot approve allowance to the zero address.");
+    _allowances[owner][spender] = value;
+    emit Approval(owner, spender, value);
+  }
+
+  // Internal function to perform transfers
+  function _transfer(address from, address to, uint256 value) private {
+    require(from != address(0), "Cannot transfer from the zero address.");
+    require(to != address(0), "Cannot transfer to the zero address.");
+    require(_balances[from] >= value, "Cannot transfer due to insufficient balance.");
+    _balances[from] -= value;
+    _balances[to] += value;
+    emit Transfer(from, to, value);
+  }
+
 }
