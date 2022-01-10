@@ -1,6 +1,6 @@
-# ERC-20 token
+# ERC-20 Test Token (ERC20T2)
 
-💳 ERC-20 token deployed to the Kovan testnet via Infura using Truffle.
+💳 ERC-20 Test Token (ERC20T2) written in Solidity deployed to the Kovan testnet via Infura using Truffle.
 
 ## Prerequisites
 

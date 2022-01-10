@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "erc20t2",
   "version": "1.0.0",
   "scripts": {
     "compile": "truffle compile",
