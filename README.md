@@ -34,24 +34,21 @@ DEVELOPMENT_PORT=7545
 
 **4.** Compile the Solidity source code and produce ABIs
 ```bash
-# with npm script
-npm run compile
-# with truffle
 truffle compile
 ```
 
 **5.** Deploy to local test network
 ```bash
-# with npm script
-npm run deploy:local
-# with truffle
+# run latest migrations
 truffle migrate --network development
+# re-run all migrations
+truffle migrate --network development --reset
 ```
 
 **6.** Deploy to kovan test network
 ```bash
-# with npm script
-npm run deploy:kovan
-# with truffle
+# run latest migrations
 truffle migrate --network kovan
+# re-run all migrations
+truffle migrate --network kovan --reset
 ```

@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // Custom ERC-20 implementation
-contract TestToken is IERC20, IERC20Metadata, Ownable {
+contract ERC20T2 is IERC20, IERC20Metadata, Ownable {
 
   // The name of the token
   string private _name = "ERC-20 Test Token";
