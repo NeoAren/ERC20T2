@@ -22,8 +22,16 @@ module.exports = {
       network_id: '*',
     },
     kovan: {
-      provider: () => new HDWalletProvider(mnemonic, infuraUrl),
+      provider: () => (
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: mnemonic,
+          },
+          providerOrUrl: infuraUrl,
+        })
+      ),
       network_id: 42,
+      networkCheckTimeout: 999999,
     },
   },
   compilers: {
