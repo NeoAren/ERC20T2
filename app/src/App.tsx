@@ -10,6 +10,7 @@ const App = () => {
 
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [contract, setContract] = useState<ethers.Contract>();
+  const [mintAmount, setMintAmount] = useState(0);
 
   useEffect(() => {
     const ethersProvider = new ethers.providers.Web3Provider(window.ethereum, 'any');
@@ -21,15 +22,15 @@ const App = () => {
   const mint = async () => {
     if (!provider || !contract) return;
     const to = await provider.getSigner().getAddress();
-    console.log(to);
-    const amount = 100000;
-    const result = await contract.mint(to, amount);
-    console.log(result);
+    const fixedMintAmount = ethers.utils.parseUnits(mintAmount.toString(), 18);
+    await contract.mint(to, fixedMintAmount);
+    setMintAmount(0);
   };
 
   return (
     <div className={styles.App}>
       <h1>Hello there</h1>
+      <input type="number" value={mintAmount} onChange={x => setMintAmount(parseInt(x.target.value))} />
       <button onClick={mint}>Mint tokens</button>
     </div>
   );
