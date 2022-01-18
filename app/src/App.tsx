@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { ChainId, Fetcher, WETH } from '@uniswap/sdk';
 import { ethers } from 'ethers';
 import styles from './App.module.scss';
 
 import abi from './ERC20T2.json';
 
+const chainId = ChainId.KOVAN;
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS as string;
 
 const App = () => {
@@ -25,6 +27,18 @@ const App = () => {
     const fixedMintAmount = ethers.utils.parseUnits(mintAmount.toString(), 18);
     await contract.mint(to, fixedMintAmount);
     setMintAmount(0);
+  };
+
+  useEffect(() => {
+    uniswap().catch((error) => console.error(error));
+  });
+
+  const uniswap = async () => {
+    if (!provider) return;
+    const weth = WETH[chainId];
+    const erc20t2 = await Fetcher.fetchTokenData(chainId, contractAddress, provider, "ERC20T2", "ERC-20 Test Token");
+    const pair = await Fetcher.fetchPairData(erc20t2, weth, provider);
+    console.log(pair);
   };
 
   return (
