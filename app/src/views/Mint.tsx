@@ -14,15 +14,21 @@ const Mint = () => {
   const mint = async () => {
     if (loading || pending) return;
     setPending(true);
-    try {
-      const tx = await tokenContract.mint(account, ethers.utils.parseUnits(amount.toString()));
-      await tx.wait();
-      setAmount(0);
-    } catch (error) {
-      alert('An unexpected error has occured.');
-    } finally {
-      setPending(false);
+    const ownerAddress = await tokenContract.owner();
+    if (ownerAddress !== account) {
+      alert('Only the owner is allowed to do this.');
+    } else if (amount < 0) {
+      alert('Please enter a positive amount.');
+    } else {
+      try {
+        const tx = await tokenContract.mint(account, ethers.utils.parseUnits(amount.toString()));
+        await tx.wait();
+      } catch (error) {
+        alert('An unexpected error has occured.');
+      }
     }
+    setAmount(0);
+    setPending(false);
   };
 
   return (
