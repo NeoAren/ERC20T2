@@ -21,7 +21,8 @@ const Mint = () => {
       alert('Please enter a positive amount.');
     } else {
       try {
-        const tx = await tokenContract.mint(account, ethers.utils.parseUnits(amount.toString()));
+        const parsedAmount = ethers.utils.parseUnits(amount.toString());
+        const tx = await tokenContract.mint(account, parsedAmount);
         await tx.wait();
       } catch (error) {
         alert('An unexpected error has occured.');

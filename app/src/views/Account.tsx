@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAccount } from '../hooks/useAccount';
+import { useAccount } from '../hooks';
 
 const Account = () => {
   const { loading, account } = useAccount();
