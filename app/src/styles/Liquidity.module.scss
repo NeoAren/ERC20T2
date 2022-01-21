@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  display: grid;
+  width: 300px;
+  grid-gap: 12px;
+  margin: 20px;
+  justify-content: center;
+  grid-template-columns: max-content 1fr;
+
+  p {
+    margin: 0;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  input {
+    padding: 4px;
+  }
+
+  button {
+    padding: 6px 12px;
+    grid-column: 1 / 3;
+  }
+}

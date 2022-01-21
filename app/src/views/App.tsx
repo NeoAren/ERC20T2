@@ -5,6 +5,7 @@ import Account from './Account';
 import Balance from './Balance';
 import Mint from './Mint';
 import Transfer from './Transfer';
+import Liquidity from './Liquidity';
 import styles from '../styles/App.module.scss';
 
 const App = () => {
@@ -33,6 +34,9 @@ const App = () => {
             <hr />
             <Mint />
             <Transfer />
+            <hr />
+            <Liquidity />
+            <hr />
           </>
         ) : (
           <button onClick={init}>Connect</button>
