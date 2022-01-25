@@ -1,26 +1,26 @@
 import React, { ChangeEvent, useState } from 'react';
-import { ethers } from 'ethers';
 import { useAccount, usePair, useRouterContract, useTokenContract } from '../hooks';
-import styles from '../styles/Liquidity.module.scss';
-
-const parseUnits = (amount: string | number) => ethers.utils.parseUnits(amount.toString());
+import { parseUnits } from '../utils/helpers';
+import styles from '../styles/App.module.scss';
 
 const Liquidity = () => {
   const tokenContract = useTokenContract();
   const routerContract = useRouterContract();
-  const { loading: accountLoading, account } = useAccount();
-  const { loading: pairLoading, pair } = usePair();
+  const { account } = useAccount();
+  const { pair } = usePair();
 
-  const [amountEther, setAmountEther] = useState(0);
+  // Pending state, amount in token and ether
+  const [pending, setPending] = useState(false);
   const [amountToken, setAmountToken] = useState(0);
+  const [amountEther, setAmountEther] = useState(0);
 
+  // Add liquidity to the token-ether pair
   const addLiquidity = async () => {
+    if (!account || !pair || pending) return;
+    setPending(true);
     try {
-      // Approve tokens to uniswap router
       const tx1 = await tokenContract.approve(routerContract.address, parseUnits(amountToken));
-      const receipt1 = await tx1.wait();
-      console.log(receipt1);
-      // Add liquidity
+      await tx1.wait();
       const deadline = Math.ceil(Date.now() / 1000 + 30 * 60);
       const tx2 = await routerContract.addLiquidityETH(
         tokenContract.address,
@@ -31,18 +31,18 @@ const Liquidity = () => {
         deadline,
         { value: parseUnits(amountEther) },
       );
-      const receipt2 = tx2.wait();
-      console.log(receipt2);
+      const receipt2 = await tx2.wait();
+      alert(`Success with '${receipt2.confirmations}' confirmations.`);
     } catch (error) {
       console.error(error);
       alert('An unexpected error has occured.');
     }
+    setAmountToken(0);
+    setAmountEther(0);
+    setPending(true);
   };
 
-  const getTokenPrice = () => pair?.token0Price.toSignificant(6);
-
-  const getEtherPrice = () => pair?.token1Price.toSignificant(6);
-
+  // Handle changing the token input and calculating ether price
   const onTokenChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!pair) return;
     const amountInToken = parseFloat(e.target.value);
@@ -52,6 +52,7 @@ const Liquidity = () => {
     setAmountEther(amountInEther);
   };
 
+  // Handle changing the ether input and calculate token price
   const onEtherChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!pair) return;
     const amountInEther = parseFloat(e.target.value);
@@ -61,19 +62,29 @@ const Liquidity = () => {
     setAmountEther(amountInEther);
   };
 
-  if (!pair) return <div>Loading...</div>;
   return (
     <div className={styles.container}>
-      <h3>Add liquidity</h3>
-      <p>You need to supply ERC20T2 and ETH <i>in equal value</i>.</p>
-      <span><b>1</b> ERC20T2 = <b>{getTokenPrice()}</b> ETH</span>
-      <span><b>1</b> ETH = <b>{getEtherPrice()}</b> ERC20T2</span>
-      <div className={styles.form}>
+      <div className={styles.liquidity}>
+        <h3>Add liquidity</h3>
+        {pending && <h4>Transaction pending...</h4>}
+        <p className={styles.description}>You need to supply ERC20T2 and ETH <i>in equal value</i>.</p>
         <p>ERC20T2:</p>
-        <input type="number" value={amountToken} onChange={onTokenChange} min={0} />
+        <input
+          type="number"
+          min={0}
+          value={amountToken}
+          onChange={onTokenChange}
+          disabled={pending}
+        />
         <p>ETH:</p>
-        <input type="number" value={amountEther} onChange={onEtherChange} min={0} />
-        <button onClick={addLiquidity}>Add liquidity</button>
+        <input
+          type="number"
+          min={0}
+          value={amountEther}
+          onChange={onEtherChange}
+          disabled={pending}
+        />
+        <button onClick={addLiquidity} disabled={pending}>Add liquidity</button>
       </div>
     </div>
   );

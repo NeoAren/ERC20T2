@@ -84,6 +84,7 @@ const TransferOrMint = () => {
         <p>Amount:</p>
         <input
           type="number"
+          min={0}
           value={amount}
           onChange={e => setAmount(parseFloat(e.target.value))}
           placeholder="Amount"
@@ -91,7 +92,7 @@ const TransferOrMint = () => {
         />
         <span>
           <input type="checkbox" id="mint" checked={isMint} onChange={onIsMintChange} disabled={pending} />
-          <label htmlFor="mint">Should mint new tokens</label>
+          <label htmlFor="mint">Mint new tokens</label>
         </span>
         <button onClick={onSubmit} disabled={pending}>{isMint ? 'Mint' : 'Transfer'} tokens</button>
       </div>

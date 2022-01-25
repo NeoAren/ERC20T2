@@ -10,7 +10,7 @@ const UserInformation = () => {
     <div className={styles.container}>
       <div className={styles.userinfo}>
         <h3>Account information</h3>
-        <b>Account address: </b>
+        <b>Account address:</b>
         <p>{account ?? '...'}</p>
         <b>Token balance:</b>
         <p>{formatUnits(tokenBalance)} <b>ERC20T2</b></p>

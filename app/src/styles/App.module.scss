@@ -41,15 +41,22 @@
   }
 }
 
-.transfer {
+.transfer, .liquidity {
   display: grid;
-  width: 300px;
+  width: 400px;
   grid-gap: 12px;
   justify-content: center;
   grid-template-columns: max-content 1fr;
 
   & > p {
+    text-align: left;
     font-weight: bold;
+  }
+
+  .description {
+    grid-column: 1 / 3;
+    font-weight: normal;
+    text-align: center;
   }
 
   span {
@@ -65,24 +72,6 @@
   }
 
   button, span, h3, h4 {
-    grid-column: 1 / 3;
-  }
-}
-
-.form {
-  display: grid;
-  width: 300px;
-  grid-gap: 12px;
-  margin: 20px;
-  justify-content: center;
-  grid-template-columns: max-content 1fr;
-
-  p {
-    text-align: left;
-    font-weight: bold;
-  }
-
-  button {
     grid-column: 1 / 3;
   }
 }
