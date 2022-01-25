@@ -1,5 +1,11 @@
 import { ethers } from 'ethers';
 
+/**
+ * Ethereum global object override
+ * The type definitions included in ethers are incomplete, and do not have
+ * some functions supported, such as `on` for event listening.
+ */
+
 export interface EthereumEvent {
   connect: unknown;
   disconnect: unknown;
