@@ -31,15 +31,15 @@ const Liquidity = () => {
         deadline,
         { value: parseUnits(amountEther) },
       );
-      const receipt2 = await tx2.wait();
-      alert(`Success with '${receipt2.confirmations}' confirmations.`);
+      const receipt = await tx2.wait();
+      alert(`Success with '${receipt.confirmations}' confirmations.`);
     } catch (error) {
       console.error(error);
       alert('An unexpected error has occured.');
     }
     setAmountToken(0);
     setAmountEther(0);
-    setPending(true);
+    setPending(false);
   };
 
   // Handle changing the token input and calculating ether price

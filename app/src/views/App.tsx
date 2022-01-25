@@ -4,6 +4,7 @@ import { SignerContext } from '../context/SignerContext';
 import UserInformation from './UserInformation';
 import TransferOrMint from './TransferOrMint';
 import Liquidity from './Liquidity';
+import Swap from './Swap';
 import styles from '../styles/App.module.scss';
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
             <UserInformation />
             <TransferOrMint />
             <Liquidity />
+            <Swap />
           </>
         ) : (
           <button className={styles.initButton} onClick={init}>Connect</button>
