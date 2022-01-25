@@ -64,10 +64,10 @@ const Liquidity = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.liquidity}>
+      <div className={styles.content}>
         <h3>Add liquidity</h3>
         {pending && <h4>Transaction pending...</h4>}
-        <p className={styles.description}>You need to supply ERC20T2 and ETH <i>in equal value</i>.</p>
+        <p className={styles.description}>You need to supply tokens and ether <i>in equal value</i>.</p>
         <p>ERC20T2:</p>
         <input
           type="number"

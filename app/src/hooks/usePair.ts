@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ChainId, Fetcher, Pair, WETH } from '@uniswap/sdk';
-import { tokenAddress } from './useContract';
+import { useTokenContract } from './useContract';
 
-const chainId = ChainId.KOVAN;
+const chainId = Number(process.env.REACT_APP_CHAIN_ID) as ChainId;
 
 export const usePair = () => {
+  const tokenContract = useTokenContract();
 
   // Loading state and uniswap pair
   const [loading, setLoading] = useState(true);
@@ -14,11 +15,11 @@ export const usePair = () => {
   const fetchPair = useCallback(async () => {
     setLoading(true);
     const ether = WETH[chainId];
-    const token = await Fetcher.fetchTokenData(chainId, tokenAddress, undefined, "ERC20T2", "ERC-20 Test Token");
+    const token = await Fetcher.fetchTokenData(chainId, tokenContract.address, undefined, "ERC20T2", "ERC-20 Test Token");
     const pairData = await Fetcher.fetchPairData(ether, token);
     setPair(pairData);
     setLoading(false);
-  }, []);
+  }, [tokenContract.address]);
 
   // Run fetch when hook is called
   useEffect(() => {

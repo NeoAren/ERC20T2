@@ -18,6 +18,10 @@
   }
 }
 
+.initButton {
+  margin-top: 20px;
+}
+
 .container {
   width: 100%;
   display: flex;
@@ -41,7 +45,7 @@
   }
 }
 
-.transfer, .liquidity {
+.content {
   display: grid;
   width: 400px;
   grid-gap: 12px;

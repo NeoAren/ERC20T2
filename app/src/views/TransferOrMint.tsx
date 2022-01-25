@@ -70,7 +70,7 @@ const TransferOrMint = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.transfer}>
+      <div className={styles.content}>
         <h3>{isMint ? 'Mint' : 'Transfer'} tokens</h3>
         {pending && <h4>Transaction pending...</h4>}
         <p>Recipient:</p>

@@ -31,7 +31,7 @@ const App = () => {
             <Liquidity />
           </>
         ) : (
-          <button onClick={init}>Connect</button>
+          <button className={styles.initButton} onClick={init}>Connect</button>
         )}
       </div>
     </SignerContext.Provider>
