@@ -18,7 +18,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .env.local
 
 # Production
-build
+/build
 
 # Truffle and solidity misc
 npm-debug.log
