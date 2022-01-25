@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { BigNumber } from 'ethers';
 import { useAccount, useBalance, useTokenContract } from '../hooks';
 import { parseUnits } from '../utils/helpers';
@@ -65,9 +65,6 @@ const TransferOrMint = () => {
     setPending(false);
   };
 
-  // Handle switching between minting and transferring
-  const onIsMintChange = (e: ChangeEvent<HTMLInputElement>) => setIsMint(e.target.checked);
-
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -91,7 +88,13 @@ const TransferOrMint = () => {
           disabled={pending}
         />
         <span>
-          <input type="checkbox" id="mint" checked={isMint} onChange={onIsMintChange} disabled={pending} />
+          <input
+            type="checkbox"
+            id="mint"
+            checked={isMint}
+            onChange={e => setIsMint(e.target.checked)}
+            disabled={pending}
+          />
           <label htmlFor="mint">Mint new tokens</label>
         </span>
         <button onClick={onSubmit} disabled={pending}>{isMint ? 'Mint' : 'Transfer'} tokens</button>

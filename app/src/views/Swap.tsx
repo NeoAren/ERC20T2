@@ -10,8 +10,9 @@ const Swap = () => {
   const { account } = useAccount();
   const { pair } = usePair();
 
-  // Pending state, and amount in token and ether
+  // Pending state, inverted swap, and amount in token and ether
   const [pending, setPending] = useState(false);
+  const [inverted, setInverted] = useState(false);
   const [amountToken, setAmountToken] = useState(0);
   const [amountEther, setAmountEther] = useState(0);
 
@@ -65,36 +66,62 @@ const Swap = () => {
     setPending(false);
   };
 
+  // Handle changing the token input and calculating ether price
   const onTokenChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!pair || !account) return;
+    if (!pair || !account || pending) return;
     const amountInToken = parseFloat(e.target.value);
     try {
       const tokenAmount = new TokenAmount(pair.token0, parseUnits(amountInToken).toBigInt());
-      const [etherAmount] = pair.getOutputAmount(tokenAmount);
-      const amountInEther = parseFloat(etherAmount.toSignificant(6));
+      const [price] = pair.getOutputAmount(tokenAmount);
+      const amountInEther = parseFloat(price.toSignificant(6));
       setAmountEther(amountInEther);
     } catch (error) {
-      setAmountEther(NaN);
+      setAmountEther(0);
     }
     setAmountToken(amountInToken);
+  };
+
+  // Handle changing the ether input and calculating token price
+  const onEtherChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!pair || !account || pending) return;
+    const amountInEther = parseFloat(e.target.value);
+    try {
+      const tokenAmount = new TokenAmount(pair.token1, parseUnits(amountInEther).toBigInt());
+      const [price] = pair.getOutputAmount(tokenAmount);
+      const amountInToken = parseFloat(price.toSignificant(6));
+      setAmountToken(amountInToken);
+    } catch (error) {
+      setAmountToken(0);
+    }
+    setAmountEther(amountInEther);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h3>Swap tokens for ether</h3>
+        <h3>Swap {inverted ? 'ether for tokens' : 'tokens for ether'}</h3>
         {pending && <h4>Transaction pending...</h4>}
-        <p>ERC20T2:</p>
+        <p>{inverted ? 'ETH' : 'ERC20T2'}:</p>
         <input
           type="number"
           min={0}
-          value={amountToken}
-          onChange={onTokenChange}
+          value={inverted ? amountEther : amountToken}
+          onChange={inverted ? onEtherChange : onTokenChange}
           disabled={pending}
         />
-        <p>ETH:</p>
-        <p>{amountEther ? amountEther : '-'}</p>
-        <button onClick={swapTokenForEther} disabled={pending}>Swap</button>
+        <p>{inverted ? 'ERC20T2' : 'ETH'}:</p>
+        <p>{inverted ? amountToken : amountEther}</p>
+        <span>
+          <input
+            type="checkbox"
+            id="invert"
+            checked={inverted}
+            onChange={e => setInverted(e.target.checked)}
+            disabled={pending}
+          />
+          <label htmlFor="invert">Switch sides</label>
+        </span>
+        <button onClick={inverted ? swapEtherForToken : swapTokenForEther} disabled={pending}>Swap</button>
       </div>
     </div>
   );
