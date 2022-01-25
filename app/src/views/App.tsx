@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { ethers, Signer } from 'ethers';
 import { SignerContext } from '../context/SignerContext';
 import UserInformation from './UserInformation';
-import Mint from './Mint';
-import Transfer from './Transfer';
+import TransferOrMint from './TransferOrMint';
 import Liquidity from './Liquidity';
 import styles from '../styles/App.module.scss';
 
@@ -23,18 +22,13 @@ const App = () => {
 
   return (
     <SignerContext.Provider value={signer}>
-      <div className={styles.App}>
+      <div className={styles.app}>
         <h1>ERC-20 Test Token</h1>
-        <hr />
         {signer ? (
           <>
             <UserInformation />
-            <hr />
-            <Mint />
-            <Transfer />
-            <hr />
+            <TransferOrMint />
             <Liquidity />
-            <hr />
           </>
         ) : (
           <button onClick={init}>Connect</button>

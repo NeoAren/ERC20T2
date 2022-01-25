@@ -9,11 +9,12 @@ const UserInformation = () => {
   return (
     <div className={styles.container}>
       <div className={styles.userinfo}>
-        <h3>Account address: </h3>
+        <h3>Account information</h3>
+        <b>Account address: </b>
         <p>{account ?? '...'}</p>
-        <h3>Token balance:</h3>
+        <b>Token balance:</b>
         <p>{formatUnits(tokenBalance)} <b>ERC20T2</b></p>
-        <h3>Ether balance:</h3>
+        <b>Ether balance:</b>
         <p>{formatUnits(etherBalance)} <b>ETH</b></p>
       </div>
     </div>
