@@ -1,37 +1,60 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
 import { useTokenContract } from './useContract';
+import { useSigner } from './useSigner';
 import { useAccount } from './useAccount';
 
 // Get the token balance of the current user
 export const useBalance = () => {
-  const { account, loading: accountLoading } = useAccount();
+  const signer = useSigner();
   const tokenContract = useTokenContract();
+  const { account } = useAccount();
 
-  // Loading state and account balance
-  const [loading, setLoading] = useState(true);
-  const [balance, setBalance] = useState(BigNumber.from(0));
+  // Loading state and balance for token and ether
+  const [tokenLoading, setTokenLoading] = useState(true);
+  const [etherLoading, setEtherLoading] = useState(true);
+  const [tokenBalance, setTokenBalance] = useState(BigNumber.from(0));
+  const [etherBalance, setEtherBalance] = useState(BigNumber.from(0));
 
-  // Update the current balance with the latest info
-  const updateBalance = useCallback(async () => {
+  // Fetch the current token balance and update the state
+  const updateTokenBalance = useCallback(async () => {
     if (!account) return;
-    setLoading(true);
-    setBalance(await tokenContract.balanceOf(account));
-    setLoading(false);
+    setTokenLoading(true);
+    setTokenBalance(await tokenContract.balanceOf(account));
+    setTokenLoading(false);
   }, [account, tokenContract]);
 
-  // Keep balance up-to-date
+  // Keep the token balance up-to-date
   useEffect(() => {
-    updateBalance();
+    if (!account) return;
+    updateTokenBalance();
     const fromAccountFilter = tokenContract.filters.Transfer(account, null);
     const toAccountFilter = tokenContract.filters.Transfer(null, account)
-    tokenContract.on(fromAccountFilter, updateBalance);
-    tokenContract.on(toAccountFilter, updateBalance);
+    tokenContract.on(fromAccountFilter, updateTokenBalance);
+    tokenContract.on(toAccountFilter, updateTokenBalance);
     return () => {
-      tokenContract.off(fromAccountFilter, updateBalance);
-      tokenContract.off(toAccountFilter, updateBalance);
+      tokenContract.off(fromAccountFilter, updateTokenBalance);
+      tokenContract.off(toAccountFilter, updateTokenBalance);
     };
-  }, [account, tokenContract, updateBalance]);
+  }, [account, tokenContract, updateTokenBalance]);
 
-  return { loading: loading || accountLoading, balance };
+  // Fetch the current ether balance and update the state
+  const updateEtherBalance = useCallback(async () => {
+    if (!account) return;
+    setEtherLoading(true);
+    setEtherBalance(await signer.getBalance());
+    setEtherLoading(false);
+  }, [account, signer]);
+
+  // Keep the ether balance up-to-date
+  useEffect(() => {
+    if (!account) return;
+    updateEtherBalance();
+    signer.provider?.on('block', updateEtherBalance);
+    return () => {
+      signer.provider?.off('block', updateEtherBalance);
+    };
+  }, [account, signer, updateEtherBalance]);
+
+  return { loading: tokenLoading || etherLoading, tokenBalance, etherBalance };
 };

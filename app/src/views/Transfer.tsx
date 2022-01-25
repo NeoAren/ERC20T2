@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { useBalance, useTokenContract } from '../hooks';
 
 const Transfer = () => {
-  const { loading, balance } = useBalance();
+  const { tokenBalance } = useBalance();
   const tokenContract = useTokenContract();
 
   // Pending state, recipient and amount of transfer
@@ -16,7 +16,7 @@ const Transfer = () => {
     if (pending) return;
     setPending(true);
     const parsedAmount = ethers.utils.parseUnits(amount.toString());
-    if (balance.lt(parsedAmount)) {
+    if (tokenBalance.lt(parsedAmount)) {
       alert('You do not have enough balance for this.');
     } else {
       try {
@@ -35,22 +35,21 @@ const Transfer = () => {
     <div>
       <h3>Transfer token</h3>
       {pending && <p>Transaction pending...</p>}
-      {loading && <p>Loading...</p>}
       <input
         type="text"
         value={recipient}
         onChange={e => setRecipient(e.target.value)}
         placeholder="Recipient"
-        disabled={loading || pending}
+        disabled={pending}
       />
       <input
         type="number"
         value={amount}
         onChange={e => setAmount(parseInt(e.target.value))}
         placeholder="Amount"
-        disabled={loading || pending}
+        disabled={pending}
       />
-      <button disabled={loading || pending} onClick={transfer}>Transfer</button>
+      <button disabled={pending} onClick={transfer}>Transfer</button>
     </div>
   );
 };

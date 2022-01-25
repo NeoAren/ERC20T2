@@ -3,7 +3,7 @@ import { useAccount, useTokenContract } from '../hooks';
 import { ethers } from 'ethers';
 
 const Mint = () => {
-  const { loading, account } = useAccount();
+  const { account } = useAccount();
   const tokenContract = useTokenContract();
 
   // Pending state and amount of token to mint
@@ -12,7 +12,7 @@ const Mint = () => {
 
   // Mint new tokens
   const mint = async () => {
-    if (loading || pending) return;
+    if (!account || pending) return;
     setPending(true);
     const ownerAddress = await tokenContract.owner();
     if (ownerAddress !== account) {
@@ -35,16 +35,15 @@ const Mint = () => {
   return (
     <div>
       <h3>Mint new tokens</h3>
-      {loading && <p>Loading...</p>}
       {pending && <p>Transaction pending...</p>}
       <input
         type="number"
         value={amount}
         onChange={e => setAmount(parseInt(e.target.value))}
         placeholder="Amount"
-        disabled={loading || pending}
+        disabled={pending}
       />
-      <button disabled={loading || pending} onClick={mint}>Mint</button>
+      <button disabled={pending} onClick={mint}>Mint</button>
     </div>
   );
 };

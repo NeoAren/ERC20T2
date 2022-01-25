@@ -1,3 +1,24 @@
 .App {
   text-align: center;
 }
+
+.userinfo {
+  display: grid;
+  grid-gap: 12px;
+  margin: 20px;
+  justify-content: center;
+  text-align: left;
+  grid-template-columns: max-content 1fr;
+
+  h3, p {
+    margin: 0;
+  }
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { ethers, Signer } from 'ethers';
 import { SignerContext } from '../context/SignerContext';
-import Account from './Account';
-import Balance from './Balance';
+import UserInformation from './UserInformation';
 import Mint from './Mint';
 import Transfer from './Transfer';
 import Liquidity from './Liquidity';
@@ -29,8 +28,7 @@ const App = () => {
         <hr />
         {signer ? (
           <>
-            <Account />
-            <Balance />
+            <UserInformation />
             <hr />
             <Mint />
             <Transfer />
