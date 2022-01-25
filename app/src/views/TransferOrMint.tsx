@@ -25,7 +25,7 @@ const TransferOrMint = () => {
       } else if (amount.lte(0)) {
         alert('Please enter a positive non-zero amount.');
       } else {
-        const tx = await tokenContract.mint(account, amount);
+        const tx = await tokenContract.mint(recipient, amount);
         const receipt = await tx.wait();
         alert(`Success with '${receipt.confirmations}' confirmations.`);
       }
